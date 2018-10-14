@@ -1,5 +1,32 @@
 # EPI Java
 
+##  Problem Metrics
+### Timeline Example :
+1. Understand Problem at 3 min
+2. Get Core Concept at 9 min
+3. Algorithm Draft at 12 min
+4. Detailed example derivation at 38 min
+5. Code draft at 58 min
+6. AC solution 60 min
+
+### Problem Class
+As `EPI Schedule` shows, from C0 to C4, remaining are C5
+My current Plan is to use Scenario 3, i.e. write and test code for the problems in Column 0 to 2, and
+pseudo-code for the problem in Column 3
+
+### Problem Level
+- Level 0: AC within 15 min
+- Level 1: AC within 30 min
+- Level 2: AC within 60 min
+- Level 3: AC with more than 60 min
+- Level 4: Need to consult reference solution or give up AC
+
+## Methodology
+- Record timeline metrics
+- Follow problem class ladder
+- Record current problem Level, review the problem in level 3 or 4 weekly or biweekly
+- Chapter summary and Weekly summary
+
 ## EPI Schedule
 ### V2
 |   |  | Scenario 1 Hackathon |  | Scenario 2 Finals cram 7 days | Scenario 3 Term project 1 month | Scenario 4 Algorithms Course 4 months  |
