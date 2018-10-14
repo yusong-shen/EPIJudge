@@ -40,20 +40,23 @@ public class SearchMaze {
     public static List<Coordinate> searchMaze(List<List<Color>> maze,
                                               Coordinate s, Coordinate e) {
         List<Coordinate> path = new ArrayList<>();
-        dfs(maze, s, e, path);
+        if (maze == null || maze.isEmpty()) return path;
+        boolean[][] visited = new boolean[maze.size()][maze.get(0).size()];
+        dfs(maze, s, e, path, visited);
         return path;
     }
 
-    private static boolean dfs(List<List<Color>> maze, Coordinate cur, Coordinate end, List<Coordinate> path) {
+    private static boolean dfs(List<List<Color>> maze, Coordinate cur, Coordinate end, List<Coordinate> path, boolean[][] visited) {
         if (!isLegal(maze, cur)) return false;
-        maze.get(cur.x).set(cur.y, Color.BLACK);
+        if (visited[cur.x][cur.y]) return false;
+        visited[cur.x][cur.y] = true;
         path.add(cur);
         if (cur.equals(end)) return true;
         // search for 4 direction
         int[][] dir = new int[][] {{0,1}, {0,-1}, {1,0}, {-1,0}};
         for (int[] d : dir) {
             Coordinate next = new Coordinate(cur.x + d[0], cur.y + d[1]);
-            if (dfs(maze, next, end, path)) {
+            if (dfs(maze, next, end, path, visited)) {
                 return true;
             }
         }
