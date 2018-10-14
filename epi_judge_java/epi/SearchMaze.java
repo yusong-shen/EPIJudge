@@ -39,29 +39,31 @@ public class SearchMaze {
 
   public static List<Coordinate> searchMaze(List<List<Color>> maze,
                                             Coordinate s, Coordinate e) {
-    // TODO - you fill in here.
     List<Coordinate> path = new ArrayList<>();
     if (maze == null || maze.isEmpty()) return path;
     boolean[][] visited = new boolean[maze.size()][maze.get(0).size()];
-    dfs(maze, s, e, path, visited);
+    path.add(s);
+    maze.get(s.x).set(s.y, Color.BLACK);
+    if (!dfs(maze, s, e, path)) {
+      path.remove(path.size() - 1);
+    }
     return path;
   }
 
-  private static boolean dfs(List<List<Color>> maze, Coordinate cur, Coordinate end, List<Coordinate> path,  boolean[][] visited) {
-    if (!isLegal(maze, cur) || visited[cur.x][cur.y]) return false;
-    visited[cur.x][cur.y] = true;
-    path.add(cur);
+  private static boolean dfs(List<List<Color>> maze, Coordinate cur, Coordinate end, List<Coordinate> path) {
     if (cur.equals(end)) return true;
     // search for 4 direction
     int[][] dir = new int[][] {{0,1}, {0,-1}, {1,0}, {-1,0}};
-    for (int i = 0; i < dir.length; i++) {
-      Coordinate next = new Coordinate(cur.x + dir[i][0], cur.y + dir[i][1]);
-      if (dfs(maze, next, end, path, visited)) {
+    for (int[] d : dir) {
+      Coordinate next = new Coordinate(cur.x + d[0], cur.y + d[1]);
+      if (!isLegal(maze, next)) continue;
+      maze.get(next.x).set(next.y, Color.BLACK);
+      path.add(next);
+      if (dfs(maze, next, end, path)) {
         return true;
       }
+      path.remove(path.size() - 1);
     }
-    visited[cur.x][cur.y] = false;
-    path.remove(cur);
     return false;
   }
 
