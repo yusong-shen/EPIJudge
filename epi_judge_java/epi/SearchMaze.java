@@ -37,42 +37,38 @@ public class SearchMaze {
 
   public enum Color { WHITE, BLACK }
 
-  public static List<Coordinate> searchMaze(List<List<Color>> maze,
-                                            Coordinate s, Coordinate e) {
-    List<Coordinate> path = new ArrayList<>();
-    if (maze == null || maze.isEmpty()) return path;
-    boolean[][] visited = new boolean[maze.size()][maze.get(0).size()];
-    path.add(s);
-    maze.get(s.x).set(s.y, Color.BLACK);
-    if (!dfs(maze, s, e, path)) {
-      path.remove(path.size() - 1);
+    public static List<Coordinate> searchMaze(List<List<Color>> maze,
+                                              Coordinate s, Coordinate e) {
+        List<Coordinate> path = new ArrayList<>();
+        dfs(maze, s, e, path);
+        return path;
     }
-    return path;
-  }
 
-  private static boolean dfs(List<List<Color>> maze, Coordinate cur, Coordinate end, List<Coordinate> path) {
-    if (cur.equals(end)) return true;
-    // search for 4 direction
-    int[][] dir = new int[][] {{0,1}, {0,-1}, {1,0}, {-1,0}};
-    for (int[] d : dir) {
-      Coordinate next = new Coordinate(cur.x + d[0], cur.y + d[1]);
-      if (!isLegal(maze, next)) continue;
-      maze.get(next.x).set(next.y, Color.BLACK);
-      path.add(next);
-      if (dfs(maze, next, end, path)) {
-        return true;
-      }
-      path.remove(path.size() - 1);
+    private static boolean dfs(List<List<Color>> maze, Coordinate cur, Coordinate end, List<Coordinate> path) {
+        if (!isLegal(maze, cur)) return false;
+        maze.get(cur.x).set(cur.y, Color.BLACK);
+        path.add(cur);
+        if (cur.equals(end)) return true;
+        // search for 4 direction
+        int[][] dir = new int[][] {{0,1}, {0,-1}, {1,0}, {-1,0}};
+        for (int[] d : dir) {
+            Coordinate next = new Coordinate(cur.x + d[0], cur.y + d[1]);
+            if (dfs(maze, next, end, path)) {
+                return true;
+            }
+        }
+        path.remove(cur);
+        return false;
     }
-    return false;
-  }
 
-  private static boolean isLegal(List<List<Color>> maze, Coordinate cur) {
-    return (0 <= cur.x && cur.x < maze.size() && 0 <= cur.y &&
-            cur.y < maze.get(cur.x).size()) && maze.get(cur.x).get(cur.y).equals(Color.WHITE);
-  }
+    private static boolean isLegal(List<List<Color>> maze, Coordinate cur) {
+        return (0 <= cur.x && cur.x < maze.size() && 0 <= cur.y &&
+                cur.y < maze.get(cur.x).size()) && maze.get(cur.x).get(cur.y).equals(Color.WHITE);
+    }
 
-  public static boolean pathElementIsFeasible(List<List<Integer>> maze,
+
+
+    public static boolean pathElementIsFeasible(List<List<Integer>> maze,
                                               Coordinate prev, Coordinate cur) {
     if (!(0 <= cur.x && cur.x < maze.size() && 0 <= cur.y &&
           cur.y < maze.get(cur.x).size() && maze.get(cur.x).get(cur.y) == 0)) {
