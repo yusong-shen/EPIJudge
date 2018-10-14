@@ -1,5 +1,6 @@
 # JetBrains IDEs (CLion, IntelliJ, and PyCharm)
 .idea
+*.iml
 
 # CLIion CMake builds
 cmake-build-debug
