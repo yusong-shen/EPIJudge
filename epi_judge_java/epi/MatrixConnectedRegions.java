@@ -3,12 +3,37 @@ import epi.test_framework.EpiTest;
 import epi.test_framework.GenericTest;
 import epi.test_framework.TimedExecutor;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
+
 public class MatrixConnectedRegions {
   public static void flipColor(int x, int y, List<List<Boolean>> image) {
-    // TODO - you fill in here.
-    return;
+      // BFS
+      if (!isLegal(x, y, image)) return;
+      boolean pixel = image.get(x).get(y);
+      int[][] dir = new int[][] {{0,1}, {0,-1}, {1,0}, {-1,0}};
+      Queue<int[]> q = new LinkedList<>();
+      q.offer(new int[] {x, y});
+      while (!q.isEmpty()) {
+          int[] cur = q.poll();
+          image.get(cur[0]).set(cur[1], !pixel);
+          for (int[] d : dir) {
+              int xx = cur[0] + d[0];
+              int yy = cur[1] + d[1];
+              if (!isLegal(xx, yy, image) || image.get(xx).get(yy) != pixel) continue;
+              q.offer(new int[] {xx, yy});
+          }
+      }
+
+      return;
   }
+
+  private static boolean isLegal(int x, int y, List<List<Boolean>> image) {
+      return (0 <= x && x < image.size() && 0 <= y && y < image.get(0).size());
+  }
+
+
   @EpiTest(testDataFile = "painting.tsv")
   public static List<List<Integer>> flipColorWrapper(TimedExecutor executor,
                                                      int x, int y,
