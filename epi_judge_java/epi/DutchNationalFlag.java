@@ -5,13 +5,45 @@ import epi.test_framework.TestFailure;
 import epi.test_framework.TimedExecutor;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.Collections.swap;
+
 public class DutchNationalFlag {
   public enum Color { RED, WHITE, BLUE }
 
+    /**
+     * Write a function that takes an array A and an index i into A, and rearranges the elements such that all
+     * elements less than A[i] appear first, followed by elements equal to A[i], followed by elements greater
+     * than A[i]. Your algorithm should have 0(1) space complexity and O(|A|)time complexity.
+     * @param pivotIndex
+     * @param A
+     */
   public static void dutchFlagPartition(int pivotIndex, List<Color> A) {
-    // TODO - you fill in here.
-    return;
+      swap(A, 0, pivotIndex);
+      Color pivot = A.get(0);
+      // 3-way partition, such that
+      // A[0, ..., lt-1] < pivot
+      // A[gt+1, ..., A.size()-1] > pivot
+      // i is the scanning pointer, A[lt, ... i-1] == pivot
+      // A[i, ..,gt] are unknown and remain to be partitioned
+      // loop until i cross the gt
+      int lt = 0, i = 0;
+      int gt = A.size() - 1;
+      while (i <= gt) {
+          if (A.get(i).ordinal() < pivot.ordinal()) {
+              swap(A, i, lt);
+              i++; lt++;
+          } else if (A.get(i).ordinal() > pivot.ordinal()) {
+              swap(A, i, gt);
+              gt--;
+          } else {
+              i++;
+          }
+      }
+      return;
   }
+
+
   @EpiTest(testDataFile = "dutch_national_flag.tsv")
   public static void dutchFlagPartitionWrapper(TimedExecutor executor,
                                                List<Integer> A, int pivotIdx)
