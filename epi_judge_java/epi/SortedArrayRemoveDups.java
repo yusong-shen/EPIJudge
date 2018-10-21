@@ -20,9 +20,9 @@ public class SortedArrayRemoveDups {
   public static int deleteDuplicates(List<Integer> A) {
     int lastDistinct = 0;
     for (int cur = 0; cur < A.size(); cur++) {
-      if (A.get(cur) != A.get(lastDistinct)) {
+      if (!A.get(cur).equals(A.get(lastDistinct))) {
         lastDistinct++;
-        A.set(lastDistinct, A.get(cur));
+        Collections.swap(A, lastDistinct, cur);
       }
     }
     return Math.min(lastDistinct + 1, A.size());
