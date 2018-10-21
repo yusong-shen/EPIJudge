@@ -18,14 +18,22 @@ public class SortedArrayRemoveDups {
    * Many languages have library functions for performing this operation—you cannot use these functions.
    */
   public static int deleteDuplicates(List<Integer> A) {
-    int lastDistinct = 0;
-    for (int cur = 0; cur < A.size(); cur++) {
-      if (!A.get(cur).equals(A.get(lastDistinct))) {
-        lastDistinct++;
-        Collections.swap(A, lastDistinct, cur);
+      if (A.isEmpty()) return 0;
+      // lastDistinct : A.subList(0, lastDistinct + 1) contain all distinct values
+      int lastDistinct = 0;
+      // cur is the scanning pointer, it always advance by 1 in each iteration
+      for (int cur = 0; cur < A.size(); cur++) {
+          if (!A.get(cur).equals(A.get(lastDistinct))) {
+              // we find another distinct value, so advance lastDistinct pointer
+              lastDistinct++;
+              // so now the lastDistinct position is vacant,
+              Collections.swap(A, lastDistinct, cur);
+              // swap will make all the item remain order
+              // or we can do following, which won't keep the order
+//               A.set(lastDistinct, A.get(cur));
+          }
       }
-    }
-    return Math.min(lastDistinct + 1, A.size());
+      return lastDistinct + 1;
   }
   @EpiTest(testDataFile = "sorted_array_remove_dups.tsv")
   public static List<Integer> deleteDuplicatesWrapper(TimedExecutor executor,
