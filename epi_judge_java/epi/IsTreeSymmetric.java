@@ -12,7 +12,7 @@ public class IsTreeSymmetric {
   private static boolean isSymmetric(BinaryTreeNode<Integer> node1, BinaryTreeNode<Integer> node2) {
     if (node1 == null && node2 == null) return true;
     if (node1 == null || node2 == null) return false;
-    if (!node1.equals(node2)) return false;
+    if (!node1.data.equals(node2.data)) return false;
     return isSymmetric(node1.left, node2.right) && isSymmetric(node1.right, node2.left);
   }
 
