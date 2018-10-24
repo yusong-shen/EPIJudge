@@ -12,20 +12,16 @@ public class TreeInorder {
   public static List<Integer> inorderTraversal(BinaryTreeNode<Integer> tree) {
     Stack<BinaryTreeNode<Integer>> stack = new Stack<>();
     List<Integer> result = new ArrayList<>();
-    if (tree == null) return  result;
     BinaryTreeNode<Integer> cur = tree;
-    while (cur != null) {
-      stack.push(cur);
-      cur = cur.left;
-    }
-    while (!stack.isEmpty()) {
+
+    while (cur != null || !stack.isEmpty()) {
+        while (cur != null) {
+            stack.push(cur);
+            cur = cur.left;
+        }
       cur = stack.pop();
       result.add(cur.data);
       cur = cur.right;
-      while (cur != null) {
-        stack.push(cur);
-        cur = cur.left;
-      }
     }
 
     return result;
