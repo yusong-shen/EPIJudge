@@ -6,21 +6,20 @@ import epi.test_framework.TimedExecutor;
 import java.util.*;
 
 public class TreeFromPreorderWithNull {
-    private static int i;
   public static BinaryTreeNode<Integer>
   reconstructPreorder(List<Integer> preorder) {
-    i = 0;
-    return reconstruct(preorder);
+    int[] i = new int[] {0};
+    return reconstruct(preorder, i);
   }
 
-  private static BinaryTreeNode<Integer> reconstruct(List<Integer> preorder) {
-      if (i >= preorder.size()) return null;
-      Integer val = preorder.get(i);
-      i++;
+  private static BinaryTreeNode<Integer> reconstruct(List<Integer> preorder, int[] i) {
+      if (i[0] >= preorder.size()) return null;
+      Integer val = preorder.get(i[0]);
+      i[0]++;
       if (val == null) return null;
       BinaryTreeNode<Integer> root = new BinaryTreeNode<>(val);
-      root.left = reconstruct(preorder);
-      root.right = reconstruct(preorder);
+      root.left = reconstruct(preorder, i);
+      root.right = reconstruct(preorder, i);
 
       return root;
   }
