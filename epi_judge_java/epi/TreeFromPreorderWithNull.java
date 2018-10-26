@@ -6,35 +6,25 @@ import epi.test_framework.TimedExecutor;
 import java.util.*;
 
 public class TreeFromPreorderWithNull {
+    private static int i;
   public static BinaryTreeNode<Integer>
   reconstructPreorder(List<Integer> preorder) {
-    Set<BinaryTreeNode<Integer>> leftVisited = new HashSet<>();
-    Stack<BinaryTreeNode<Integer>> stack = new Stack<>();
-    for (Integer v : preorder) {
-      if (stack.empty()) {
-        stack.push(new BinaryTreeNode<>(v));
-      } else {
-        BinaryTreeNode<Integer> prev = stack.peek();
-        BinaryTreeNode<Integer> cur = (v == null) ? null : new BinaryTreeNode<>(v);
-        if (!leftVisited.contains(prev) && prev.left == null) {
-          prev.left = cur;
-          leftVisited.add(prev);
-        } else if (leftVisited.contains(prev) && prev.right == null){
-          leftVisited.remove(prev);
-          prev.right = cur;
-          stack.pop();
-        }
-        if (cur != null) {
-          stack.push(cur);
-        }
-      }
-    }
-    BinaryTreeNode<Integer> root = null;
-    while (!stack.isEmpty()) {
-      root = stack.pop();
-    }
-    return root;
+    i = 0;
+    return reconstruct(preorder);
   }
+
+  private static BinaryTreeNode<Integer> reconstruct(List<Integer> preorder) {
+      if (i >= preorder.size()) return null;
+      Integer val = preorder.get(i);
+      i++;
+      if (val == null) return null;
+      BinaryTreeNode<Integer> root = new BinaryTreeNode<>(val);
+      root.left = reconstruct(preorder);
+      root.right = reconstruct(preorder);
+
+      return root;
+  }
+
   @EpiTest(testDataFile = "tree_from_preorder_with_null.tsv")
   public static BinaryTreeNode<Integer>
   reconstructPreorderWrapper(TimedExecutor executor, List<String> strings)
