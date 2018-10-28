@@ -14,7 +14,8 @@ public class PowerSet {
   public static List<List<Integer>> generatePowerSet(List<Integer> inputSet) {
     List<Integer> curSet = new ArrayList<>();
     List<List<Integer>> ret = new ArrayList<>();
-    powerSet(0, inputSet, curSet, ret);
+    Collections.sort(inputSet);
+    powerSetWithDuplicates(0, inputSet, curSet, ret);
     return ret;
   }
 
@@ -27,6 +28,18 @@ public class PowerSet {
     }
 
   }
+
+
+    private static void powerSetWithDuplicates(int start, List<Integer> inputSet, List<Integer> curSet, List<List<Integer>> ret) {
+        ret.add(new ArrayList<>(curSet));
+        for (int i = start; i < inputSet.size(); i++) {
+            if (i > start && inputSet.get(i) == inputSet.get(i - 1)) continue;
+            curSet.add(inputSet.get(i));
+            powerSet(i + 1, inputSet, curSet, ret);
+            curSet.remove(curSet.remove(curSet.size() - 1));
+        }
+
+    }
 
   @EpiTestComparator
   public static BiPredicate<List<List<Integer>>, List<List<Integer>>> comp =
