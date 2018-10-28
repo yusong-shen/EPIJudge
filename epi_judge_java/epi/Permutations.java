@@ -12,7 +12,8 @@ public class Permutations {
   @EpiTest(testDataFile = "permutations.tsv")
 
   public static List<List<Integer>> permutations(List<Integer> A) {
-    return permutations(A, A.size());
+//    return permutations(A, A.size());
+      return permuteUnique(A);
   }
 
   private static List<List<Integer>> permutations(List<Integer> A, int len) {
@@ -37,6 +38,40 @@ public class Permutations {
 
     return result;
   }
+
+    public static List<List<Integer>> permuteUnique(List<Integer> nums) {
+        List<List<Integer>> ret = new ArrayList<>();
+        List<Integer> permutation = new ArrayList<>();
+        boolean[] used = new boolean[nums.size()];
+        Collections.sort(nums);
+        backtrack(nums, permutation, ret, used);
+        return ret;
+    }
+
+    private static void backtrack(List<Integer> nums, List<Integer> permutation, List<List<Integer>> ret, boolean[] used) {
+        if (permutation.size() == nums.size()) {
+            ret.add(new ArrayList<>(permutation));
+            return;
+        }
+        for (int i = 0; i < nums.size(); i++) {
+            // [1, 2_1, 2_2]
+            // if current element has been used, continue
+            // or haven't been used, but we had (1, 2_1, 2_2) already
+            // when we backtrack to (1), should we explore (1, 2_2 ...) path?
+            // the answer is not, otherwise we will get duplicated permutation,
+            // and 2_1 will be unused in this situation, that's why we use !used[i - 1] here.
+            // If we haven't had (1, 2_1, 2_2), for example, we are in (1, 2_1),
+            // 2_1 will be in used, 2_2 should not be skipped
+            if (used[i] || (i > 0 && nums.get(i) == nums.get(i - 1) && !used[i - 1])) continue;
+            used[i] = true;
+            permutation.add(nums.get(i));
+            backtrack(nums, permutation, ret, used);
+            used[i] = false;
+            permutation.remove(permutation.size() - 1);
+        }
+
+
+    }
 
   @EpiTestComparator
   public static BiPredicate<List<List<Integer>>, List<List<Integer>>> comp =
