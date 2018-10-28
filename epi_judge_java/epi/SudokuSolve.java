@@ -10,9 +10,58 @@ import java.util.Objects;
 import java.util.Set;
 public class SudokuSolve {
   public static boolean solveSudoku(List<List<Integer>> partialAssignment) {
-    // TODO - you fill in here.
+
+    return backtrackSolver(0, 0, partialAssignment);
+  }
+
+  private static boolean backtrackSolver(int i, int j, List<List<Integer>> partialAssignment) {
+    // base case :
+    if (i == partialAssignment.size()) {
+      // if i reach the end of current column, try new column
+      i = 0;
+      j++;
+      // if the entire board is filled, we have found a solution, return true
+      if (j == partialAssignment.get(0).size()) return true;
+    }
+
+    // try each empty entry remaining
+    // skip filled entry
+    if (partialAssignment.get(i).get(j) != 0) {
+      return backtrackSolver(i + 1, j, partialAssignment);
+    };
+    for (int v = 1; v <= 9; v++) {
+      if (!isValidToAdd(i, j, v, partialAssignment)) continue;
+      partialAssignment.get(i).set(j, v);
+      if (backtrackSolver(i + 1, j, partialAssignment)) return true;
+    }
+
+    // undo assignment, backtrack
+    partialAssignment.get(i).set(j, 0);
+    return false;
+  }
+
+  private static boolean isValidToAdd(int i, int j, int val, List<List<Integer>> partialAssignment) {
+    // row
+    for (List<Integer> row : partialAssignment) {
+      if (val == row.get(j)) return false;
+    }
+    // column
+    for (int c = 0; c < partialAssignment.get(0).size(); c++) {
+      if (val == partialAssignment.get(i).get(c)) return false;
+    }
+
+    // submatrix
+    // locate the specific submatrix
+    int x = i / 3, y = j / 3;
+    for (int r = x * 3; r < (x + 1) * 3; r++) {
+      for (int c = y * 3; c < (y + 1) * 3; c++) {
+          if (val == partialAssignment.get(r).get(c)) return false;
+        }
+    }
+
     return true;
   }
+
   @EpiTest(testDataFile = "sudoku_solve.tsv")
   public static void solveSudokuWrapper(TimedExecutor executor,
                                         List<List<Integer>> partialAssignment)
