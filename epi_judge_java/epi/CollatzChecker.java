@@ -34,19 +34,19 @@ public class CollatzChecker {
       map.put(1l, true);
       return true;
     }
-    if (i % 2 == 0) {
-      boolean ret = simulateCollatez(i / 2, map);
-      map.put(i, ret);
-      return ret;
-    }
     if (i % 2 == 1) {
+        // test for overflow
+        if (i * 3 + 1 < i) {
+            throw new ArithmeticException("Collatz sequence overflow for " + i);
+        }
       boolean ret = simulateCollatez(i * 3 + 1, map);
       map.put(i, ret);
       return ret;
     }
-    boolean ret = false;
-    map.put(i, ret);
-    return ret;
+    // even number
+      boolean ret = simulateCollatez(i / 2, map);
+      map.put(i, ret);
+      return ret;
   }
 
   public static void main(String[] args) {
