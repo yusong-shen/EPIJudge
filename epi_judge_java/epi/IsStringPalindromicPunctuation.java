@@ -5,7 +5,22 @@ public class IsStringPalindromicPunctuation {
   @EpiTest(testDataFile = "is_string_palindromic_punctuation.tsv")
 
   public static boolean isPalindrome(String s) {
-    // TODO - you fill in here.
+    s = s.toLowerCase();
+    int l = 0, r = s.length() - 1;
+    while (l < r) {
+      while (l < s.length() && !Character.isLetterOrDigit(s.charAt(l))) {
+        l++;
+      }
+      while (r >= 0 && !Character.isLetterOrDigit(s.charAt(r))) {
+        r--;
+      }
+      if (l >= r) break;
+//      System.out.println(s.charAt(l) + " : " + s.charAt(r));
+      if (s.charAt(l) != s.charAt(r)) return false;
+      l++;
+      r--;
+    }
+
     return true;
   }
 
