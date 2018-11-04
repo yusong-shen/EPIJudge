@@ -5,8 +5,9 @@ public class ConvertBase {
   @EpiTest(testDataFile = "convert_base.tsv")
 
   public static String convertBase(String numAsString, int b1, int b2) {
-    // TODO - you fill in here.
-    return "";
+    int a1 = Integer.parseInt(numAsString, b1);
+    String a2 = Integer.toString(a1, b2);
+    return a2.toUpperCase();
   }
 
   public static void main(String[] args) {
