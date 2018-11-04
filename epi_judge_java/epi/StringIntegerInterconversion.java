@@ -9,7 +9,7 @@ public class StringIntegerInterconversion {
     boolean isNegative = x < 0;
     StringBuilder sb = new StringBuilder();
     while (x != 0) {
-      sb.append(Math.abs(x) % 10);
+      sb.append(Math.abs(x % 10));
       x = x / 10;
     }
     if (isNegative) sb.append("-");
