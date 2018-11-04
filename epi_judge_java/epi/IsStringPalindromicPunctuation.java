@@ -14,8 +14,6 @@ public class IsStringPalindromicPunctuation {
       while (r >= 0 && !Character.isLetterOrDigit(s.charAt(r))) {
         r--;
       }
-      if (l >= r) break;
-//      System.out.println(s.charAt(l) + " : " + s.charAt(r));
       if (s.charAt(l) != s.charAt(r)) return false;
       l++;
       r--;
