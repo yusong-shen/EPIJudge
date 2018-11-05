@@ -5,26 +5,30 @@ import epi.test_framework.TimedExecutor;
 public class ReverseWords {
 
   public static void reverseWords(char[] input) {
-    String s = new String(input);
-    String[] words = s.split(" ");
-    reverse(words);
-    int k = 0;
-    for (int i = 0; i < words.length; i++) {
-      String w = words[i];
-      for (int j = 0; j < w.length(); j++) {
-        input[k++] = w.charAt(j);
-      }
-      if (i != words.length - 1) {
-        input[k++] = ' ';
-      }
+    reverse(input, 0, input.length - 1);
+    int s = 0, e = e = find(input, s, ' ');
+    for (; e != -1; e = find(input, s, ' ')) {
+        reverse(input, s, e - 1);
+        s = e + 1;
     }
+    reverse(input, s, input.length - 1);
     return;
   }
 
-  private static void reverse(String[] words) {
-    int l = 0, r = words.length - 1;
+    private static int find(char[] input, int s, char c) {
+      int i = s;
+      for (; i < input.length; i++) {
+          if (input[i] == c) {
+              return i;
+          }
+      }
+
+      return -1;
+    }
+
+    private static void reverse(char[] words, int l, int r) {
     while (l < r) {
-      String temp = words[l];
+      char temp = words[l];
       words[l] = words[r];
       words[r] = temp;
       l++;
