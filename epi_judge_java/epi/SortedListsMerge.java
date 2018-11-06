@@ -6,8 +6,20 @@ public class SortedListsMerge {
   //@include
   public static ListNode<Integer> mergeTwoSortedLists(ListNode<Integer> L1,
                                                       ListNode<Integer> L2) {
-    // TODO - you fill in here.
-    return null;
+    ListNode<Integer> dummy = new ListNode<>(-1, null);
+    ListNode<Integer> cur = dummy;
+    while (L1 != null && L2 != null) {
+      if (L1.data < L2.data) {
+        cur.next = L1;
+        L1 = L1.next;
+      } else {
+        cur.next = L2;
+        L2 = L2.next;
+      }
+      cur = cur.next;
+    }
+    cur.next = L1 == null ? L2 : L1;
+    return dummy.next;
   }
 
   public static void main(String[] args) {
