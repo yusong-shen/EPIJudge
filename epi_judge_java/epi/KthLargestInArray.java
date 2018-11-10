@@ -1,6 +1,8 @@
 package epi;
 import epi.test_framework.EpiTest;
 import epi.test_framework.GenericTest;
+
+import java.util.Collections;
 import java.util.List;
 public class KthLargestInArray {
   // The numbering starts from one, i.e., if A = [3,1,-1,2] then
@@ -8,8 +10,40 @@ public class KthLargestInArray {
   // findKthLargest(A, 3) returns 1, and findKthLargest(A, 4) returns -1.
   @EpiTest(testDataFile = "kth_largest_in_array.tsv")
   public static int findKthLargest(int k, List<Integer> A) {
-    // TODO - you fill in here.
+    if (k < 1 || k > A.size()) return 0;
+    int lo = 0, hi = A.size() - 1;
+    while (lo <= hi) {
+      int p = partition(A, lo, hi);
+      if (p < k - 1) {
+        lo = p + 1;
+      } else if (p > k - 1) {
+        hi = p - 1;
+      } else {
+        return A.get(p);
+      }
+    }
+
+
     return 0;
+  }
+
+  private static int partition(List<Integer> A, int lo, int hi) {
+    int s = lo, e = hi;
+    int v = A.get(lo);
+    while (true) {
+      while (A.get(s) >= v) {
+        s++;
+        if (s == hi) break;
+      }
+      while (A.get(e) <= v) {
+        e--;
+        if (e == lo) break;
+      }
+      if (s >= e) break;
+      Collections.swap(A, s, e);
+    }
+    Collections.swap(A, lo, e);
+    return e;
   }
 
   public static void main(String[] args) {
