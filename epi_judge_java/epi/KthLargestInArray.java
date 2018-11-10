@@ -18,7 +18,7 @@ public class KthLargestInArray {
     Collections.shuffle(A);
     int lo = 0, hi = A.size() - 1;
     while (lo < hi) {
-      int p = partition(A, lo, hi);
+      int p = partition2(A, lo, hi);
       if (p < k) {
         lo = p + 1;
       } else if (p > k) {
@@ -53,6 +53,18 @@ public class KthLargestInArray {
     }
     Collections.swap(A, lo, e);
     return e;
+  }
+
+  private static int partition2(List<Integer> A, int lo, int hi) {
+    int v = A.get(hi);
+    int newPivotInd = lo;
+    for (int i = lo; i < hi; i++) {
+      if (A.get(i) > v) {
+        Collections.swap(A, i, newPivotInd++);
+      }
+    }
+    Collections.swap(A, hi, newPivotInd);
+    return newPivotInd;
   }
 
   public static void main(String[] args) {
