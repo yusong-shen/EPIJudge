@@ -56,13 +56,15 @@ public class KthLargestInArray {
   }
 
   private static int partition2(List<Integer> A, int lo, int hi) {
-    int v = A.get(hi);
+    // use last element as pivot value
+    int pivotVal = A.get(hi);
     int newPivotInd = lo;
     for (int i = lo; i < hi; i++) {
-      if (A.get(i) > v) {
+      if (A.get(i) > pivotVal) {
         Collections.swap(A, i, newPivotInd++);
       }
     }
+    // put the pivot value back to its correct position
     Collections.swap(A, hi, newPivotInd);
     return newPivotInd;
   }
