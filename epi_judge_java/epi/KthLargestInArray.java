@@ -4,6 +4,8 @@ import epi.test_framework.GenericTest;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
+
 public class KthLargestInArray {
   // The numbering starts from one, i.e., if A = [3,1,-1,2] then
   // findKthLargest(A, 1) returns 3, findKthLargest(A, 2) returns 2,
@@ -12,6 +14,8 @@ public class KthLargestInArray {
   public static int findKthLargest(int k, List<Integer> A) {
     if (k < 1 || k > A.size()) return 0;
     k--; // make it 0 index based
+    // avoid O(n^2) when A is already sorted
+    Collections.shuffle(A);
     int lo = 0, hi = A.size() - 1;
     while (lo < hi) {
       int p = partition(A, lo, hi);
