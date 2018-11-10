@@ -11,32 +11,37 @@ public class KthLargestInArray {
   @EpiTest(testDataFile = "kth_largest_in_array.tsv")
   public static int findKthLargest(int k, List<Integer> A) {
     if (k < 1 || k > A.size()) return 0;
+    k--; // make it 0 index based
     int lo = 0, hi = A.size() - 1;
-    while (lo <= hi) {
+    while (lo < hi) {
       int p = partition(A, lo, hi);
-      if (p < k - 1) {
+      if (p < k) {
         lo = p + 1;
-      } else if (p > k - 1) {
+      } else if (p > k) {
         hi = p - 1;
       } else {
         return A.get(p);
       }
     }
-
-
-    return 0;
+    // lo >= hi
+    // array size 1
+    return A.get(k);
   }
 
   private static int partition(List<Integer> A, int lo, int hi) {
-    int s = lo, e = hi;
+    // pay attention to s and e
+    int s = lo, e = hi + 1;
     int v = A.get(lo);
     while (true) {
-      while (A.get(s) >= v) {
-        s++;
+      // increase s first
+      // stop at the element that <= v
+      // avoid O(n^2) when there are large number of duplicates
+      while (A.get(++s) > v) {
         if (s == hi) break;
       }
-      while (A.get(e) <= v) {
-        e--;
+      // decrease e first
+      // stop at the element that >= v
+      while (A.get(--e) < v) {
         if (e == lo) break;
       }
       if (s >= e) break;
