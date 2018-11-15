@@ -3,26 +3,34 @@ import epi.test_framework.EpiTest;
 import epi.test_framework.EpiUserType;
 import epi.test_framework.GenericTest;
 import epi.test_framework.TestFailure;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 public class StackWithMax {
 
+  static List<Integer>  stack = new ArrayList<>();
+  static List<Integer> maxCandidates = new ArrayList<>();
+
   public static class Stack {
     public boolean empty() {
-      // TODO - you fill in here.
-      return true;
+      return stack.isEmpty();
     }
     public Integer max() {
-      // TODO - you fill in here.
-      return 0;
+      return maxCandidates.get(maxCandidates.size() - 1);
     }
     public Integer pop() {
-      // TODO - you fill in here.
-      return 0;
+      int top = stack.remove(stack.size() - 1);
+      if (top == maxCandidates.get(maxCandidates.size() - 1)) {
+        maxCandidates.remove(maxCandidates.size() - 1);
+      }
+      return top;
     }
     public void push(Integer x) {
-      // TODO - you fill in here.
-      return;
+      stack.add(x);
+      if (maxCandidates.isEmpty() || x >= maxCandidates.get(maxCandidates.size() - 1)) {
+        maxCandidates.add(x);
+      }
     }
   }
   @EpiUserType(ctorParams = {String.class, int.class})
