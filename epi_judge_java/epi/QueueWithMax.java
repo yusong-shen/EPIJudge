@@ -18,6 +18,7 @@ public class QueueWithMax {
     }
     maxCandidates.addLast(x);
   }
+
   public Integer dequeue() {
     int head = q.remove(0);
     if (head == maxCandidates.getFirst()) {
