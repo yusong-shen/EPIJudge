@@ -1,15 +1,36 @@
 package epi;
 import epi.test_framework.EpiTest;
 import epi.test_framework.GenericTest;
+
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.PriorityQueue;
+
 public class SortAlmostSortedArray {
 
   public static List<Integer>
   sortApproximatelySortedData(Iterator<Integer> sequence, int k) {
-    // TODO - you fill in here.
-    return null;
+    List<Integer> result = new ArrayList<>();
+    PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+    int i = 0;
+    for (; i <= k; i++) {
+      if (sequence.hasNext()) {
+        minHeap.add(sequence.next());
+      }
+    }
+    while (sequence.hasNext()) {
+      result.add(minHeap.poll());
+      minHeap.add(sequence.next());
+    }
+    while (!minHeap.isEmpty()) {
+      result.add(minHeap.poll());
+    }
+    return result;
   }
+
+
+
   @EpiTest(testDataFile = "sort_almost_sorted_array.tsv")
   public static List<Integer>
   sortApproximatelySortedDataWrapper(List<Integer> sequence, int k) {
