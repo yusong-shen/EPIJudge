@@ -2,7 +2,12 @@ package epi;
 import epi.test_framework.EpiTest;
 import epi.test_framework.EpiUserType;
 import epi.test_framework.GenericTest;
+
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.PriorityQueue;
+
 public class CalendarRendering {
   @EpiUserType(ctorParams = {int.class, int.class})
 
@@ -28,8 +33,21 @@ public class CalendarRendering {
   @EpiTest(testDataFile = "calendar_rendering.tsv")
 
   public static int findMaxSimultaneousEvents(List<Event> A) {
-    // TODO - you fill in here.
-    return 0;
+    Collections.sort(A, Comparator.comparingInt(a -> a.start));
+    int count = 1;
+    PriorityQueue<Event> minHeap = new PriorityQueue<>(Comparator.comparingInt(a -> a.finish));
+    for (Event e : A) {
+      if (!minHeap.isEmpty()) {
+        if (e.start <= minHeap.peek().finish) {
+          count++;
+        } else {
+          minHeap.poll();
+        }
+      }
+      minHeap.add(e);
+    }
+
+    return count;
   }
 
   public static void main(String[] args) {
