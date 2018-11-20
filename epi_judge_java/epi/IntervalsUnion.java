@@ -16,6 +16,22 @@ public class IntervalsUnion {
     private static class Endpoint {
       public boolean isClosed;
       public int val;
+
+      @Override
+      public String toString() {
+        return "Endpoint{" +
+                "isClosed=" + isClosed +
+                ", val=" + val +
+                '}';
+      }
+    }
+
+    @Override
+    public String toString() {
+      return "Interval{" +
+              "left=" + left +
+              ", right=" + right +
+              '}';
     }
   }
 
@@ -23,20 +39,22 @@ public class IntervalsUnion {
     List<Interval> result = new ArrayList<>();
     Collections.sort(intervals, (a, b) -> {
       if (a.left.val == b.left.val) {
+        // closed point should appear first, i.e 0 or -1
         if (a.left.isClosed == b.left.isClosed) {
           return 0;
         } else if (a.left.isClosed) {
-          return 1;
-        } else {
           return -1;
+        } else {
+          return 1;
         }
       }
       return Integer.compare(a.left.val, b.left.val);
     });
     for (Interval interval : intervals) {
-      if (result.isEmpty() || !isIntersected(interval, result.get(result.size() - 1))) {
+      if (result.isEmpty() || !isIntersected(result.get(result.size() - 1), interval)) {
         result.add(interval);
       } else {
+        // interval intersected
         Interval top = result.remove(result.size() - 1);
         result.add(mergeTwoInterval(top, interval));
       }
@@ -45,33 +63,34 @@ public class IntervalsUnion {
     return result;
   }
 
-  private static boolean isIntersected(Interval i1, Interval i2) {
-    if (i2.left.val > i1.right.val) {
+  private static boolean isIntersected(Interval leftPoint, Interval rightPoint) {
+    if (rightPoint.left.val > leftPoint.right.val) {
       return false;
+    } else if (rightPoint.left.val == leftPoint.right.val) {
+      // only when both of them are open, they are separated
+      return (rightPoint.left.isClosed || leftPoint.right.isClosed);
+    } else {
+      // rightPoint.left.val < leftPoint.right.val
+      return true;
     }
-    // i2.left.val == i1.right.val
-    // only when both of them are open, they are separated
-    return !(!i2.left.isClosed && !i1.left.isClosed);
   }
 
-  private static Interval mergeTwoInterval(Interval top, Interval interval) {
-    Interval.Endpoint left = top.left;
+  private static Interval mergeTwoInterval(Interval leftInterval, Interval rightInterval) {
     Interval.Endpoint right = null;
-    if (top.right.val > interval.right.val) {
-      right = top.right;
-    } else if (top.right.val < interval.right.val) {
-      right = interval.right;
+    if (leftInterval.right.val > rightInterval.right.val) {
+      right = leftInterval.right;
+    } else if (leftInterval.right.val < rightInterval.right.val) {
+      right = rightInterval.right;
     } else {
-      if (top.right.isClosed == interval.right.isClosed) {
-        right = top.right;
+      // leftInterval.right.val == rightInterval.right.val
+      if (leftInterval.right.isClosed == rightInterval.right.isClosed) {
+        right = leftInterval.right;
       } else {
-        right = (top.right.isClosed) ? top.right : interval.right;
+        right = (leftInterval.right.isClosed) ? leftInterval.right : rightInterval.right;
       }
     }
-    Interval merged = new Interval();
-    merged.left = left;
-    merged.right = right;
-    return merged;
+    leftInterval.right = right;
+    return leftInterval;
   }
 
   @EpiUserType(
