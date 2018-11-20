@@ -5,6 +5,7 @@ import epi.test_framework.GenericTest;
 import epi.test_framework.TimedExecutor;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 public class IntervalsUnion {
 
@@ -19,9 +20,60 @@ public class IntervalsUnion {
   }
 
   public static List<Interval> unionOfIntervals(List<Interval> intervals) {
-    // TODO - you fill in here.
-    return Collections.emptyList();
+    List<Interval> result = new ArrayList<>();
+    Collections.sort(intervals, (a, b) -> {
+      if (a.left.val == b.left.val) {
+        if (a.left.isClosed == b.left.isClosed) {
+          return 0;
+        } else if (a.left.isClosed) {
+          return 1;
+        } else {
+          return -1;
+        }
+      }
+      return Integer.compare(a.left.val, b.left.val);
+    });
+    for (Interval interval : intervals) {
+      if (result.isEmpty() || !isIntersected(interval, result.get(result.size() - 1))) {
+        result.add(interval);
+      } else {
+        Interval top = result.remove(result.size() - 1);
+        result.add(mergeTwoInterval(top, interval));
+      }
+    }
+
+    return result;
   }
+
+  private static boolean isIntersected(Interval i1, Interval i2) {
+    if (i2.left.val > i1.right.val) {
+      return false;
+    }
+    // i2.left.val == i1.right.val
+    // only when both of them are open, they are separated
+    return !(!i2.left.isClosed && !i1.left.isClosed);
+  }
+
+  private static Interval mergeTwoInterval(Interval top, Interval interval) {
+    Interval.Endpoint left = top.left;
+    Interval.Endpoint right = null;
+    if (top.right.val > interval.right.val) {
+      right = top.right;
+    } else if (top.right.val < interval.right.val) {
+      right = interval.right;
+    } else {
+      if (top.right.isClosed == interval.right.isClosed) {
+        right = top.right;
+      } else {
+        right = (top.right.isClosed) ? top.right : interval.right;
+      }
+    }
+    Interval merged = new Interval();
+    merged.left = left;
+    merged.right = right;
+    return merged;
+  }
+
   @EpiUserType(
       ctorParams = {int.class, boolean.class, int.class, boolean.class})
   public static class FlatInterval {
