@@ -3,21 +3,38 @@ import epi.test_framework.EpiTest;
 import epi.test_framework.EpiUserType;
 import epi.test_framework.GenericTest;
 import epi.test_framework.TestFailure;
+
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class LruCache {
-  LruCache(final int capacity) {}
+
+  private LinkedHashMap<Integer, Integer> linkedHashMap;
+
+  LruCache(final int capacity) {
+    this.linkedHashMap = new LinkedHashMap<>(capacity, 1.0f, true) {
+      @Override
+      protected boolean removeEldestEntry(Map.Entry<Integer, Integer> e) {
+        return size() > capacity;
+      }
+    };
+  }
   public Integer lookup(Integer key) {
-    // TODO - you fill in here.
-    return 0;
+    if (!linkedHashMap.containsKey(key)) {
+      return null;
+    }
+    return linkedHashMap.get(key);
   }
   public void insert(Integer key, Integer value) {
-    // TODO - you fill in here.
-    return;
+    Integer currentValue = linkedHashMap.get(key);
+    if (currentValue == null) {
+      linkedHashMap.put(key, value);
+    }
   }
   public Boolean erase(Object key) {
-    // TODO - you fill in here.
-    return true;
+    Integer valToRemove = linkedHashMap.remove(key);
+    return valToRemove != null;
   }
   @EpiUserType(ctorParams = {String.class, int.class, int.class})
   public static class Op {
