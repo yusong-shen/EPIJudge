@@ -21,20 +21,13 @@ public class LruCache {
     };
   }
   public Integer lookup(Integer key) {
-    if (!linkedHashMap.containsKey(key)) {
-      return null;
-    }
-    return linkedHashMap.get(key);
+    return linkedHashMap.getOrDefault(key, -1);
   }
   public void insert(Integer key, Integer value) {
-    Integer currentValue = linkedHashMap.get(key);
-    if (currentValue == null) {
-      linkedHashMap.put(key, value);
-    }
+    linkedHashMap.putIfAbsent(key, value);
   }
   public Boolean erase(Object key) {
-    Integer valToRemove = linkedHashMap.remove(key);
-    return valToRemove != null;
+    return linkedHashMap.remove(key) != null;
   }
   @EpiUserType(ctorParams = {String.class, int.class, int.class})
   public static class Op {
