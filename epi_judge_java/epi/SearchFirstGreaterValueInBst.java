@@ -3,17 +3,19 @@ import epi.test_framework.EpiTest;
 import epi.test_framework.GenericTest;
 public class SearchFirstGreaterValueInBst {
 
-  static BstNode<Integer> candidate = new BstNode<>(-1);
 
   public static BstNode<Integer> findFirstGreaterThanK(BstNode<Integer> tree,
                                                        Integer k) {
-    if (tree == null) return candidate;
-    if (k >= tree.data) {
-      findFirstGreaterThanK(tree.right, k);
-    } else {
-      candidate = tree;
-      findFirstGreaterThanK(tree.left, k);
+    BstNode<Integer> candidate = null;
+    while (tree != null) {
+      if (k >= tree.data) {
+        tree = tree.right;
+      } else {
+        candidate = tree;
+        tree = tree.left;
+      }
     }
+
     return candidate;
   }
 
