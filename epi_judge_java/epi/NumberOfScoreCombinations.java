@@ -12,25 +12,25 @@ public class NumberOfScoreCombinations {
   public static int
   numCombinationsForFinalScore(int finalScore,
                                List<Integer> individualPlayScores) {
-    Map<Integer, Integer> cache = new HashMap<>();
-    for (int score : individualPlayScores) {
-      cache.put(score, 1);
+    if (individualPlayScores.isEmpty()) return 0;
+    // dp[i][j] : # of ways to get score j, by using individualPlayScores.subList(0, i+1)
+    int[][] dp = new int[individualPlayScores.size()][finalScore + 1];
+    // initialization
+    for (int k = 0; k * individualPlayScores.get(0) <= finalScore; k++) {
+        dp[0][k * individualPlayScores.get(0)] = 1;
     }
-    return helper(finalScore, individualPlayScores, cache);
+    for (int i = 1; i < individualPlayScores.size(); i++) {
+        for (int j = 0; j < finalScore + 1; j++) {
+            int withoutCurrentPlay = dp[i - 1][j];
+            int withCurrentPlay = j - individualPlayScores.get(i) >= 0 ?
+                    dp[i][j - individualPlayScores.get(i)] : 0;
+            dp[i][j] = withoutCurrentPlay + withCurrentPlay;
+        }
+    }
+
+    return dp[individualPlayScores.size() - 1][finalScore];
   }
 
-  private static int helper(int finalScore, List<Integer> individualPlayScores, Map<Integer, Integer> cache) {
-    if (finalScore < 0) return 0;
-    if (cache.containsKey(finalScore)) {
-      return cache.get(finalScore);
-    }
-    int result = 0;
-    for (int score : individualPlayScores) {
-      result += helper(finalScore - score, individualPlayScores, cache);
-    }
-    cache.put(finalScore, result);
-    return result;
-  }
 
   public static void main(String[] args) {
     System.exit(
