@@ -30,6 +30,8 @@ public class LevenshteinDistance {
 
     public static int levenshteinDistance(String A, String B) {
         int len1= A.length(), len2 = B.length();
+        // make sure len2 >= len1
+        if (len1 < len2) return levenshteinDistance(B, A);
         int[][] dp = new int[2][len2 + 1];
         // init
         dp[1][0] = 1;
