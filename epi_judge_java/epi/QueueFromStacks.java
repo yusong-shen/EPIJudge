@@ -3,18 +3,31 @@ import epi.test_framework.EpiTest;
 import epi.test_framework.EpiUserType;
 import epi.test_framework.GenericTest;
 import epi.test_framework.TestFailure;
+
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 public class QueueFromStacks {
 
   public static class Queue {
+
+    Deque<Integer> s1 = new LinkedList<>();
+    Deque<Integer> s2 = new LinkedList<>();
+
     public void enqueue(Integer x) {
-      // TODO - you fill in here.
+      s1.addFirst(x);
       return;
     }
     public Integer dequeue() {
-      // TODO - you fill in here.
-      return 0;
+      Integer result = null;
+      if (s2.isEmpty()) {
+        while (!s1.isEmpty()) {
+          s2.addFirst(s1.removeFirst());
+        }
+      }
+      result = s2.removeFirst();
+      return result;
     }
   }
   @EpiUserType(ctorParams = {String.class, int.class})
