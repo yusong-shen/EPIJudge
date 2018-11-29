@@ -32,6 +32,36 @@ public class TreeLevelOrder {
     return result;
   }
 
+    public List<List<Integer>> zigzagLevelOrder(BinaryTreeNode<Integer> root) {
+        if (root == null) return Collections.emptyList();
+        List<List<Integer>> result = new ArrayList<>();
+        Queue<BinaryTreeNode<Integer>> q = new LinkedList<>();
+        q.offer(root);
+        int levelNum = 0;
+        while (!q.isEmpty()) {
+            int levelSize = q.size();
+            List<Integer> level = new LinkedList<>();
+            for (int i = 0; i < levelSize; i++) {
+                BinaryTreeNode<Integer> cur = q.poll();
+
+                if (levelNum % 2 == 0) {
+                    level.add(cur.data);
+                } else {
+                    level.add(0, cur.data);
+                }
+                if (cur.left != null) {
+                    q.offer(cur.left);
+                }
+                if (cur.right != null) {
+                    q.offer(cur.right);
+                }
+            }
+            levelNum++;
+            result.add(level);
+        }
+        return result;
+    }
+
   public static void main(String[] args) {
     System.exit(
         GenericTest
