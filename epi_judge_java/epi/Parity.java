@@ -4,8 +4,13 @@ import epi.test_framework.GenericTest;
 public class Parity {
   @EpiTest(testDataFile = "parity.tsv")
   public static short parity(long x) {
-    // TODO - you fill in here.
-    return 0;
+    short result = 0;
+    while (x != 0) {
+      result ^= 1;
+      x = x & (x - 1);
+    }
+
+    return result;
   }
 
   public static void main(String[] args) {
