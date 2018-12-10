@@ -9,10 +9,9 @@ public class AbsentValueArray {
 
   @EpiTest(testDataFile = "absent_value_array.tsv")
   public static int findMissingElement(Iterable<Integer> stream) {
-    int min = Integer.MAX_VALUE, max = Integer.MIN_VALUE;
+    int min = 0, max = Integer.MIN_VALUE;
     Set<Integer> set = new HashSet<>();
     for (int num : stream) {
-      min = Math.min(num, min);
       max = Math.max(num, max);
       set.add(num);
     }
