@@ -48,8 +48,32 @@ public class SearchForMissingElement {
   @EpiTest(testDataFile = "find_missing_and_duplicate.tsv")
 
   public static DuplicateAndMissing findDuplicateMissing(List<Integer> A) {
-    // TODO - you fill in here.
-    return new DuplicateAndMissing(0, 0);
+
+    int xor = 0;
+    int n = A.size();
+    for (int i = 0; i < n; i++) {
+      xor = xor ^ i ^ A.get(i);
+    }
+    // xor = missing ^ duplicate
+    // get the least set bit
+    int diffBit = xor & (~(xor - 1));
+    int missOrDupl = 0;
+    for (int i = 0; i < n; i++) {
+      if ((i & diffBit) != 0) {
+        missOrDupl ^= i;
+      }
+      if ((A.get(i) & diffBit) != 0) {
+        missOrDupl ^= A.get(i);
+      }
+    }
+    for (int num : A) {
+      // missOrDupl is duplidate
+      if (num == missOrDupl) {
+        return new DuplicateAndMissing(missOrDupl, xor ^ missOrDupl);
+      }
+    }
+    // missOrDupl is missing
+    return new DuplicateAndMissing(xor ^ missOrDupl, missOrDupl);
   }
 
   public static void main(String[] args) {
