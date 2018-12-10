@@ -37,7 +37,7 @@ public class SearchFrequentItems {
       }
     }
     for (String key : candidatefreqCount.keySet()) {
-      if ((double) candidatefreqCount.get(key) >= 1.0 * n / k) {
+      if ((double) candidatefreqCount.get(key) > 1.0 * n / k) {
         result.add((key));
       }
     }
