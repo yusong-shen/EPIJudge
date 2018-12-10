@@ -6,8 +6,22 @@ import java.util.List;
 public class MajorityElement {
 
   public static String majoritySearch(Iterator<String> stream) {
-    // TODO - you fill in here.
-    return "";
+    String candidate = "";
+    int count = 0;
+    while (stream.hasNext()) {
+     String s = stream.next();
+     if (count == 0) {
+       candidate = s;
+       count++;
+     } else if (s.equals(candidate)) {
+       count++;
+     } else {
+       count--;
+     }
+
+    }
+
+    return candidate;
   }
   @EpiTest(testDataFile = "majority_element.tsv")
   public static String majoritySearchWrapper(List<String> stream) {
