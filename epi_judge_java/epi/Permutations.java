@@ -74,9 +74,8 @@ public class Permutations {
 
     public static List<List<Integer>> permuteUniqueBySwap(List<Integer> nums) {
         List<List<Integer>> ret = new ArrayList<>();
-        List<Integer> permutation = new ArrayList<>();
 //        Collections.sort(nums);
-        backtrackSwap(0, nums, permutation, ret);
+        backtrackSwap(0, nums, ret);
         return ret;
     }
 
@@ -105,21 +104,20 @@ public class Permutations {
      * that if we meet the element again, we can just skip it.
      * @param start
      * @param nums
-     * @param permutation
      * @param ret
      */
-    private static void backtrackSwap(int start, List<Integer> nums, List<Integer> permutation, List<List<Integer>> ret) {
-        if (permutation.size() == nums.size()) {
-            ret.add(new ArrayList<>(permutation));
+    private static void backtrackSwap(int start, List<Integer> nums, List<List<Integer>> ret) {
+        if (start + 1 == nums.size()) {
+            ret.add(new ArrayList<>(nums));
             return;
         }
         Set<Integer> used = new HashSet<>();
         for (int i = start; i < nums.size(); i++) {
             if (used.contains(nums.get(i))) continue;
             used.add(nums.get(i));
-            Collections.swap(permutation, i, start);
-            backtrackSwap(start + 1, nums, permutation, ret);
-            Collections.swap(permutation, i, start);
+            Collections.swap(nums, i, start);
+            backtrackSwap(start + 1, nums, ret);
+            Collections.swap(nums, i, start);
         }
 
 
